@@ -105,5 +105,11 @@
   <ItemGroup>
     <Content Include="Entitlements.plist" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ParkMeMobile.Common\ParkMeMobile.Common.csproj">
+      <Project>{e34d4989-9f24-41de-a8d9-c5d4d9b7809d}</Project>
+      <Name>ParkMeMobile.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
