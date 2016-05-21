@@ -35,7 +35,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <Folder Include="Polling\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\HttpConstants.cs" />
@@ -43,6 +42,8 @@
     <Compile Include="Models\Park.cs" />
     <Compile Include="Models\Point.cs" />
     <Compile Include="Models\Slot.cs" />
+    <Compile Include="Polling\PollingService.cs" />
+    <Compile Include="Polling\Timer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
