@@ -29,10 +29,12 @@ namespace ParkMeMobile.Android.UI.Activities
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.Main);
 
-            mPollingService = new PollingService<Park>(UpdateUI);
+            mPollingService = new PollingService<Park>(UpdateUi);
 
             InitializeLocationManager();
             InitializeMaps();
+
+            MoveCameraOnCurrentPosition();
         }
 
         protected override void OnResume()
@@ -40,19 +42,23 @@ namespace ParkMeMobile.Android.UI.Activities
             base.OnResume();
 
             mLocationManager.RequestLocationUpdates(mLocationProvider, 0, 0, this);
+
+            mPollingService.StartTimer();
         }
 
         protected override void OnPause()
         {
             base.OnPause();
             mLocationManager.RemoveUpdates(this);
+
+            mPollingService.StopTimer();
         }
 
         #endregion
 
         #region Data management
 
-        private void UpdateUI(Park park)
+        private void UpdateUi(Park park)
         {
             MoveCameraOnCurrentPosition();
         }
@@ -86,6 +92,9 @@ namespace ParkMeMobile.Android.UI.Activities
 
             var locationBuilder = CameraPosition.InvokeBuilder();
             locationBuilder.Target(location);
+            locationBuilder.Tilt(50);
+            locationBuilder.Bearing(155);
+            locationBuilder.Zoom(18);
 
             var position = CameraUpdateFactory.NewCameraPosition(locationBuilder.Build());
             mMap.MoveCamera(position);
