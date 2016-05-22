@@ -7,7 +7,7 @@ namespace ParkMeMobile.Common.Polling
 {
     public class PollingService<T>
     {
-        private static readonly TimeSpan mTimerInterval = TimeSpan.FromSeconds(5);
+        private static readonly TimeSpan mTimerInterval = TimeSpan.FromSeconds(1);
 
         private readonly Timer mTimer;
         private readonly Action<T> mCallback;
@@ -42,9 +42,16 @@ namespace ParkMeMobile.Common.Polling
 
         private async Task PollData()
         {
-            var data = await HttpClient.Get<T>(HttpConstants.ENDPOINT_GET_ALL_PARKS);
+            try
+            {
+                var data = await HttpClient.Get<T>(HttpConstants.ENDPOINT_GET_ALL_PARKS);
 
-            mCallback.Invoke(data);
+                mCallback.Invoke(data);
+            }
+            catch (Exception e)
+            {
+                
+            }
         }
 
 #endregion

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -18,7 +19,13 @@ namespace ParkMeMobile.Common.Http
                 // Get a stream representation of the HTTP web response:
                 using (var stream = response.GetResponseStream())
                 {
-                    return JsonConvert.DeserializeObject<T>(stream.ToString());
+                    using (var streamReader = new StreamReader(stream))
+                    {
+                        var objString = streamReader.ReadToEnd();
+
+                        var result = JsonConvert.DeserializeObject<T>(objString);
+                        return result;
+                    }
                 }
             }
         }
