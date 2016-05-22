@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Android.App;
+using Android.Content;
 using Android.Gms.Maps;
 using Android.Gms.Maps.Model;
 using Android.Locations;
 using Android.OS;
+using Android.Widget;
 using ParkMeMobile.Common.Models;
 using ParkMeMobile.Common.Polling;
 
@@ -20,6 +22,22 @@ namespace ParkMeMobile.Android.UI.Activities
         private GoogleMap mMap;
 
         private PollingService<IList<Park>> mPollingService;
+
+        private IList<Slot> mSlots = new[]
+        {
+            new Slot
+            {
+                IsOccupied = true
+            },
+            new Slot
+            {
+                IsOccupied = true
+            },
+            new Slot
+            {
+                IsOccupied = true
+            }
+        };
 
         #region Lifecycle
 
@@ -70,6 +88,11 @@ namespace ParkMeMobile.Android.UI.Activities
                             continue;
                         }
 
+                        if (slot.IsOccupied != mSlots[i].IsOccupied)
+                        {
+                            Toast.MakeText(this, "New parking slots are available!", ToastLength.Short).Show();
+                        }
+
                         var marker = new MarkerOptions();
                         marker.SetPosition(new LatLng(slot.Position.X, slot.Position.Y));
                         marker.SetTitle($"Parking slot {i}");
@@ -78,6 +101,8 @@ namespace ParkMeMobile.Android.UI.Activities
 
                         i++;
                     }
+
+                    mSlots = park.Slots;
                 }
             });
         }
