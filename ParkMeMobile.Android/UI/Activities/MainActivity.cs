@@ -46,8 +46,6 @@ namespace ParkMeMobile.Android.UI.Activities
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.Main);
 
-            mPollingService = new PollingService<IList<Park>>(UpdateUi);
-
             InitializeLocationManager();
             InitializeMaps();
 
@@ -58,6 +56,7 @@ namespace ParkMeMobile.Android.UI.Activities
         {
             base.OnResume();
 
+            mPollingService = new PollingService<IList<Park>>(UpdateUi);
             mPollingService.StartTimer();
         }
 
