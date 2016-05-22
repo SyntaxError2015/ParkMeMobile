@@ -331,9 +331,6 @@ namespace ParkMeMobile.Android
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f07000d
-			public const int MyButton = 2131165197;
-			
 			// aapt resource value: 0x7f070005
 			public const int adjust_height = 2131165189;
 			
@@ -354,6 +351,12 @@ namespace ParkMeMobile.Android
 			
 			// aapt resource value: 0x7f07000c
 			public const int light = 2131165196;
+			
+			// aapt resource value: 0x7f07000d
+			public const int main_layout = 2131165197;
+			
+			// aapt resource value: 0x7f07000e
+			public const int map_frag = 2131165198;
 			
 			// aapt resource value: 0x7f070001
 			public const int none = 2131165185;
