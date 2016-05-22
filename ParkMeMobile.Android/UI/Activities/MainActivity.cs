@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using Android.App;
 using Android.Gms.Maps;
 using Android.Gms.Maps.Model;
@@ -13,11 +12,12 @@ namespace ParkMeMobile.Android.UI.Activities
     [Activity(Label = "ParkMe!", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity, ILocationListener
     {
+        private const double LATITUDE = 45.7482311;
+        private const double LONGITUDE = 21.2398982;
+
         private MapFragment mMapFragment;
         private LocationManager mLocationManager;
         private string mLocationProvider;
-        private Location mCurrentLocation;
-        private Address mCurrentAddress;
         private GoogleMap mMap;
 
         private PollingService<Park> mPollingService;
@@ -41,22 +41,28 @@ namespace ParkMeMobile.Android.UI.Activities
         {
             base.OnResume();
 
-            mLocationManager.RequestLocationUpdates(mLocationProvider, 0, 0, this);
+            if (mLocationProvider == string.Empty)
+            {
+                return;
+            }
 
-            mPollingService.StartTimer();
+            mLocationManager?.RequestLocationUpdates(mLocationProvider, 0, 0, this);
+
+            //mPollingService.StartTimer();
         }
 
         protected override void OnPause()
         {
             base.OnPause();
-            mLocationManager.RemoveUpdates(this);
 
-            mPollingService.StopTimer();
+            mLocationManager?.RemoveUpdates(this);
+
+            //mPollingService.StopTimer();
         }
 
         #endregion
 
-        #region Data management
+        #region UI updates
 
         private void UpdateUi(Park park)
         {
@@ -86,15 +92,11 @@ namespace ParkMeMobile.Android.UI.Activities
 
         private void MoveCameraOnCurrentPosition()
         {
-            var location = mCurrentAddress != null
-                               ? new LatLng(mCurrentAddress.Latitude, mCurrentAddress.Longitude)
-                               : new LatLng(mCurrentLocation.Latitude, mCurrentLocation.Longitude);
+            var location = new LatLng(LATITUDE, LONGITUDE);
 
             var locationBuilder = CameraPosition.InvokeBuilder();
             locationBuilder.Target(location);
-            locationBuilder.Tilt(50);
-            locationBuilder.Bearing(155);
-            locationBuilder.Zoom(18);
+            locationBuilder.Zoom(19);
 
             var position = CameraUpdateFactory.NewCameraPosition(locationBuilder.Build());
             mMap.MoveCamera(position);
@@ -103,15 +105,6 @@ namespace ParkMeMobile.Android.UI.Activities
         #endregion
 
         #region Location management
-
-        private async Task GetCurrentAddress()
-        {
-            var geocoder = new Geocoder(this);
-
-            var addressList = await geocoder.GetFromLocationAsync(mCurrentLocation.Latitude, mCurrentLocation.Longitude, 10);
-
-            mCurrentAddress = addressList.FirstOrDefault();
-        }
 
         private void InitializeLocationManager()
         {
@@ -127,15 +120,8 @@ namespace ParkMeMobile.Android.UI.Activities
             mLocationProvider = acceptableLocationProviders.Any() ? acceptableLocationProviders.First() : string.Empty;
         }
 
-        public async void OnLocationChanged(Location location)
+        public void OnLocationChanged(Location location)
         {
-            if (location == null)
-            {
-                return;
-            }
-
-            mCurrentLocation = location;
-            await GetCurrentAddress();
         }
 
         public void OnProviderDisabled(string provider)
