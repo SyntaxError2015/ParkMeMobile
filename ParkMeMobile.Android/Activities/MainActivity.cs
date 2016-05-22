@@ -1,10 +1,9 @@
 ﻿using Android.App;
-using Android.Widget;
 using Android.OS;
 
-namespace ParkMeMobile.Android
+namespace ParkMeMobile.Android.Activities
 {
-    [Activity(Label = "ParkMeMobile.Android", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "ParkMe!", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
         protected override void OnCreate(Bundle bundle)
