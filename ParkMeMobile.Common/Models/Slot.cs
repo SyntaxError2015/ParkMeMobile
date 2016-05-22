@@ -8,7 +8,7 @@ namespace ParkMeMobile.Common.Models
         public string Id { get; set; }
 
         [JsonProperty("isOccupied")]
-        public string IsOccupied { get; set; }
+        public bool IsOccupied { get; set; }
 
         [JsonProperty("park")]
         public Park Park { get; set; }
